@@ -7,4 +7,5 @@ After downloading the code, from the root folder of the project, run the followi
 You need at least php 5.5.9* with mysql extension enabled and Composer
 
 composer install 
+
 mysql telematics < database/telematics.sql
