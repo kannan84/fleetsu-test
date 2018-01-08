@@ -9,3 +9,30 @@ You need at least php 5.5.9* with mysql extension enabled and Composer
 composer install 
 
 mysql telematics < database/telematics.sql
+
+
+Jquery templating enabled
+
+REST API endpoints
+
+GET /devices
+
+  id(Optional)
+
+POST /devices
+
+  label
+  
+  last_reported (UTC time Format YYYY-MM-DD HH:MM:SS)
+
+POST /transactions
+  
+  label(Device Label)
+
+  lat
+  
+  lng
+
+  reported_at (UTC time Format YYYY-MM-DD HH:MM:SS)
+  
+GMaps integration to show the last reported location for the device on details page
