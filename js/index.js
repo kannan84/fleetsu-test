@@ -9,19 +9,38 @@ $(document).on('click', '#user-list li', function(){
 var ajax = { 
     parseJSON:function(result){ 
         var obj = jQuery.parseJSON(result);
-        $('#user-list').empty();        
-        $.each(obj, function(key,row) {
-            $('#user-list').append('<li data-listid="' + key + '"><a href="" data-id="' + row.id + '"><img src="assets/images/'+row.image+'"/><h3>' + row.id + '</h3><p>' + row.label + '</p><p>' + row.last_reported + '</p></a></li>');       
-        });
+        $.each(obj,function(index,value){ 
+            moment.tz.setDefault("Etc/UTC");
+            var date = new Date(value.last_reported);
+            var userTz = moment.tz.guess(); 
+            if (userTz != undefined) {
+                var temp = '';
+               temp = moment(value.last_reported);
+               obj[index].last_reported=temp.tz(userTz).format();
+            } else {
+               obj[index].last_reported =  date.toString();
+            }
+        }); 
+        $("#user-list").loadTemplate("#devicesTemplate",obj,{error: function(e) { console.log(e); }});
+        
         $('#user-list').listview('refresh');        
     },
     parseJSONDetails:function(result){ 
-        var obj = jQuery.parseJSON(result);     
+        var obj = jQuery.parseJSON(result);
+        moment.tz.setDefault("Etc/UTC");
+        var date = new Date(obj.last_reported);
+        var userTz = moment.tz.guess(); 
+        if (userTz != undefined) {
+            var temp = '';
+           temp = moment(obj.last_reported);
+           obj.last_reported=temp.tz(userTz).format();
+        } else {
+           obj.last_reported =  date.toString();
+        }
+      
         $('#personal-data').empty();
-        $('#personal-data').append('<li><img src="assets/images/'+obj.image+'"></li>');
-        $('#personal-data').append('<li>Device ID: '+obj.id+'</li>');
-        $('#personal-data').append('<li>Device Label: '+obj.label+'</li>');           
-        $('#personal-data').append('<li>Reported at: '+obj.last_reported+'</li>');           
+        $("#personal-data").loadTemplate("#devicesTemplate",obj,{error: function(e) { console.log(e); }});
+        //$("#personal-data").loadTemplate("#transactionTemplate",obj,{error: function(e) { console.log(e); }});
         $('#personal-data').listview().listview('refresh'); 
         $.mobile.changePage( "#second");
     },
@@ -41,4 +60,4 @@ var ajax = {
             }
         });
     }
-} 
+}

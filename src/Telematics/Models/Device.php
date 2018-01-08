@@ -6,17 +6,14 @@ class Device extends \Illuminate\Database\Eloquent\Model
 {
     protected $dateFormat = 'U';
     public $timestamps = FALSE;
-    public function output()
+
+    public function transaction(){
+        return $this->hasMany('Telematics\Models\Transaction');
+    }
+
+    public function output($scope='list')
     {
         $output = [];
-        /*$output['body']         = $this->body;
-        $output['user_id']      = $this->user_id;
-        $output['user_uri']     = '/user/' .$this->user_id;
-        $output['created_at']   = $this->created_at;
-        $output['image_url']    = $this->image_url;
-        $output['message_id']   = $this->id;
-        $output['message_uri']  = '/messages/' .$this->id;
-*/
         $output['id']      = $this->id;
         $output['label']         = $this->label;
         $output['last_reported']         = $this->last_reported;
@@ -24,10 +21,17 @@ class Device extends \Illuminate\Database\Eloquent\Model
         $reported = Carbon::parse($this->last_reported);
         $interval = $now->diffInDays($reported);
         if($interval <=1){
-            $output['image'] = 'success.jpg';
+            $output['status']="OK";
         }
         else{
-            $output['image'] = 'failure.jpg';
+            $output['status']="OFFLINE";
+        }
+        if($scope=='detail'){
+            $transactionDetail = $this->transaction->last();
+            if(!empty($transactionDetail)){
+                $output['transaction'] = $transactionDetail;
+                $output['mapSrc'] = 'https://www.google.com/maps/embed/v1/place?key=AIzaSyAxjxzwc8YFQBEhf30ollgP--KqCRwFqLE&q='.$transactionDetail->lat.','.$transactionDetail->lng;
+            }
         }
         return $output;
     }

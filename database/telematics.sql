@@ -27,7 +27,7 @@ CREATE TABLE `devices` (
   `label` varchar(255) NOT NULL,
   `last_reported` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -36,8 +36,37 @@ CREATE TABLE `devices` (
 
 LOCK TABLES `devices` WRITE;
 /*!40000 ALTER TABLE `devices` DISABLE KEYS */;
-INSERT INTO `devices` VALUES (1,'Device 1','2018-01-03 09:00:00'),(2,'Device 2','2016-07-05 01:00:00'),(3,'Device 3','2016-07-12 00:00:00'),(4,'Device 4','2016-07-12 01:00:00'),(5,'device 6','2018-01-02 21:50:53');
+INSERT INTO `devices` VALUES (1,'Device 1','2018-01-07 10:53:33'),(2,'Device 2','2016-07-05 01:00:00'),(3,'Device 3','2016-07-12 00:00:00'),(4,'Device 4','2016-07-12 01:00:00'),(5,'device 6','2018-01-02 21:50:53'),(6,'Device 10','2018-01-07 10:53:33');
 /*!40000 ALTER TABLE `devices` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `transactions`
+--
+
+DROP TABLE IF EXISTS `transactions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `transactions` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `device_id` int(10) NOT NULL,
+  `lat` float(10,6) NOT NULL,
+  `lng` float(10,6) NOT NULL,
+  `reported_at` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `device_id` (`device_id`),
+  CONSTRAINT `transactions_ibfk_1` FOREIGN KEY (`device_id`) REFERENCES `devices` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `transactions`
+--
+
+LOCK TABLES `transactions` WRITE;
+/*!40000 ALTER TABLE `transactions` DISABLE KEYS */;
+INSERT INTO `transactions` VALUES (1,1,13.042327,80.256538,'2018-01-07 10:53:33'),(2,1,13.048821,80.203598,'2018-01-07 10:53:33');
+/*!40000 ALTER TABLE `transactions` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -49,4 +78,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-01-04  8:49:30
+-- Dump completed on 2018-01-08  7:08:02
